@@ -261,6 +261,70 @@ iframe {
   justify-content: center;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
+}
+
+.volume-control {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 221, 148, 0.28);
+  border-radius: 999px;
+  background: rgba(58, 31, 14, 0.72);
+}
+
+.volume-icon {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.volume-slider {
+  width: 118px;
+  height: 16px;
+  min-height: 16px;
+  padding: 0;
+  cursor: pointer;
+  appearance: none;
+  border: none;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, var(--accent) var(--volume, 100%), rgba(255, 239, 198, 0.22) var(--volume, 100%));
+}
+
+.volume-slider::-webkit-slider-thumb {
+  width: 13px;
+  height: 13px;
+  appearance: none;
+  border-radius: 999px;
+  border: 2px solid #fff2c6;
+  background: var(--wine);
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border-radius: 999px;
+  border: 2px solid #fff2c6;
+  background: var(--wine);
+}
+
+.turbo-btn {
+  width: auto;
+  min-width: 68px;
+  height: 34px;
+  min-height: 34px;
+  padding: 0 12px;
+  font-size: 12px;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+
+.turbo-btn.active {
+  color: #211006;
 }
 
 button {
@@ -484,5 +548,14 @@ button:hover {
 
   .mode-btn {
     flex: 1 1 140px;
+  }
+
+  .volume-control {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+
+  .volume-slider {
+    width: min(180px, 42vw);
   }
 }

@@ -74,6 +74,14 @@
         <span class="control-icon">↻</span>
         <span class="control-label">Todas</span>
       </button>
+
+      <div class="volume-control" aria-label="Controle de volume">
+        <span class="volume-icon">Vol</span>
+        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="100" step="1" aria-label="Volume" />
+        <button type="button" id="turboBtn" class="control-btn turbo-btn" onclick="toggleTurboGain()" aria-pressed="false" aria-label="Turbo gain desligado" title="Turbo Gain">
+          Turbo
+        </button>
+      </div>
     </div>
   </footer>
 

@@ -42,7 +42,12 @@ let loadedIndex = null;
 let shuffle = false;
 let repeatMode = "all";
 let autoNextTimer = null;
+let turboGain = false;
+let audioContext = null;
+let audioSource = null;
+let gainNode = null;
 const audioPlayer = new Audio();
+audioPlayer.crossOrigin = "anonymous";
 
 const iframeBox = document.getElementById("iframeBox");
 const currentTitle = document.getElementById("currentTitle");
@@ -54,6 +59,8 @@ const totalMusics = document.getElementById("totalMusics");
 const progressBar = document.getElementById("progressBar");
 const currentTimeLabel = document.getElementById("currentTime");
 const durationTimeLabel = document.getElementById("durationTime");
+const volumeSlider = document.getElementById("volumeSlider");
+const turboBtn = document.getElementById("turboBtn");
 
 function renderLibrary() {
   musicList.innerHTML = "";
@@ -80,6 +87,10 @@ function playTrack() {
   const music = musics[currentIndex];
   clearAutoNextTimer();
   loadIframe(music);
+
+  if (turboGain) {
+    setupAudioBoost();
+  }
 
   if (audioPlayer.src !== music.audioSrc) {
     audioPlayer.src = music.audioSrc;
@@ -181,6 +192,56 @@ function seekTrack() {
     clearAutoNextTimer();
     startAutoNextTimer(duration);
   }
+}
+
+function setupAudioBoost() {
+  if (gainNode) {
+    if (audioContext && audioContext.state === "suspended") {
+      audioContext.resume();
+    }
+    return;
+  }
+
+  try {
+    audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+    audioSource = audioSource || audioContext.createMediaElementSource(audioPlayer);
+    gainNode = audioContext.createGain();
+    audioSource.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    if (audioContext.state === "suspended") {
+      audioContext.resume();
+    }
+    updateVolume();
+  } catch (error) {
+    gainNode = null;
+    audioPlayer.volume = Number(volumeSlider.value) / 100;
+  }
+}
+
+function updateVolume() {
+  const volume = Number(volumeSlider.value) / 100;
+  const gain = turboGain ? 2.2 : 1;
+
+  volumeSlider.style.setProperty("--volume", `${volume * 100}%`);
+  audioPlayer.volume = volume;
+
+  if (gainNode) {
+    gainNode.gain.value = gain;
+  }
+}
+
+function toggleTurboGain() {
+  setupAudioBoost();
+  turboGain = !turboGain;
+  updateVolume();
+  updateTurboButton();
+}
+
+function updateTurboButton() {
+  turboBtn.classList.toggle("active", turboGain);
+  turboBtn.setAttribute("aria-pressed", String(turboGain));
+  turboBtn.setAttribute("aria-label", turboGain ? "Turbo gain ligado" : "Turbo gain desligado");
+  turboBtn.title = turboGain ? "Turbo Gain: Ligado" : "Turbo Gain: Desligado";
 }
 
 function togglePlay() {
@@ -338,10 +399,13 @@ function toggleRepeat() {
 totalMusics.textContent = musics.length;
 repeatBtn.classList.add("active");
 updateShuffleButton();
+updateVolume();
+updateTurboButton();
 audioPlayer.addEventListener("ended", nextTrack);
 audioPlayer.addEventListener("timeupdate", updateProgress);
 audioPlayer.addEventListener("loadedmetadata", updateProgress);
 progressBar.addEventListener("input", seekTrack);
+volumeSlider.addEventListener("input", updateVolume);
 durationTimeLabel.textContent = formatTime(musics[currentIndex].duration);
 updateProgress();
 renderLibrary();
