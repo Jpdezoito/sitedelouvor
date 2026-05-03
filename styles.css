@@ -192,9 +192,10 @@ iframe {
   z-index: 50;
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding: 14px 18px;
   border: 0;
   border-top: 1px solid rgba(255, 221, 148, 0.42);
@@ -205,6 +206,61 @@ iframe {
     0 -18px 44px rgba(0, 0, 0, 0.38),
     inset 0 1px 0 rgba(255, 247, 230, 0.08);
   backdrop-filter: blur(14px);
+}
+
+.progress-row {
+  width: min(860px, 100%);
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  gap: 10px;
+  align-items: center;
+}
+
+.time-label {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 18px;
+  min-height: 18px;
+  padding: 0;
+  cursor: pointer;
+  appearance: none;
+  border: none;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, var(--accent) var(--progress, 0%), rgba(255, 239, 198, 0.22) var(--progress, 0%));
+}
+
+.progress-bar::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  appearance: none;
+  border-radius: 999px;
+  border: 2px solid #fff2c6;
+  background: var(--wine);
+  box-shadow: 0 0 0 4px rgba(240, 189, 91, 0.18);
+}
+
+.progress-bar::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 2px solid #fff2c6;
+  background: var(--wine);
+  box-shadow: 0 0 0 4px rgba(240, 189, 91, 0.18);
+}
+
+.control-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
 }
 
 button {
@@ -413,6 +469,15 @@ button:hover {
     bottom: 0;
     width: 100%;
     padding: 10px 8px;
+    gap: 10px;
+  }
+
+  .progress-row {
+    grid-template-columns: 40px minmax(0, 1fr) 40px;
+    gap: 8px;
+  }
+
+  .control-row {
     flex-wrap: wrap;
     gap: 10px;
   }

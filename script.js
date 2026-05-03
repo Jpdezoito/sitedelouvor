@@ -51,6 +51,9 @@ const shuffleBtn = document.getElementById("shuffleBtn");
 const repeatBtn = document.getElementById("repeatBtn");
 const musicList = document.getElementById("musicList");
 const totalMusics = document.getElementById("totalMusics");
+const progressBar = document.getElementById("progressBar");
+const currentTimeLabel = document.getElementById("currentTime");
+const durationTimeLabel = document.getElementById("durationTime");
 
 function renderLibrary() {
   musicList.innerHTML = "";
@@ -81,6 +84,8 @@ function playTrack() {
   if (audioPlayer.src !== music.audioSrc) {
     audioPlayer.src = music.audioSrc;
   }
+  durationTimeLabel.textContent = formatTime(music.duration);
+  updateProgress();
 
   audioPlayer.play()
     .then(() => {
@@ -139,6 +144,43 @@ function setPlayingState(playing) {
   playPauseBtn.setAttribute("aria-label", playing ? "Pausar" : "Tocar");
   playPauseBtn.title = playing ? "Pausar" : "Tocar";
   playPauseBtn.classList.toggle("pause", playing);
+}
+
+function formatTime(seconds) {
+  if (!Number.isFinite(seconds) || seconds < 0) {
+    return "0:00";
+  }
+
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Math.floor(seconds % 60).toString().padStart(2, "0");
+  return `${minutes}:${remainingSeconds}`;
+}
+
+function updateProgress() {
+  const duration = audioPlayer.duration || musics[currentIndex].duration || 0;
+  const currentTime = audioPlayer.currentTime || 0;
+  const progress = duration ? (currentTime / duration) * 100 : 0;
+
+  progressBar.value = progress;
+  progressBar.style.setProperty("--progress", `${progress}%`);
+  currentTimeLabel.textContent = formatTime(currentTime);
+  durationTimeLabel.textContent = formatTime(duration);
+}
+
+function seekTrack() {
+  const duration = audioPlayer.duration || musics[currentIndex].duration || 0;
+
+  if (!duration) {
+    return;
+  }
+
+  audioPlayer.currentTime = (Number(progressBar.value) / 100) * duration;
+  updateProgress();
+
+  if (isPlaying) {
+    clearAutoNextTimer();
+    startAutoNextTimer(duration);
+  }
 }
 
 function togglePlay() {
@@ -297,4 +339,9 @@ totalMusics.textContent = musics.length;
 repeatBtn.classList.add("active");
 updateShuffleButton();
 audioPlayer.addEventListener("ended", nextTrack);
+audioPlayer.addEventListener("timeupdate", updateProgress);
+audioPlayer.addEventListener("loadedmetadata", updateProgress);
+progressBar.addEventListener("input", seekTrack);
+durationTimeLabel.textContent = formatTime(musics[currentIndex].duration);
+updateProgress();
 renderLibrary();

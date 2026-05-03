@@ -43,30 +43,38 @@
   </main>
 
   <footer class="controls" aria-label="Controles do player">
-    <button type="button" class="control-btn skip-btn" onclick="previousTrack()" aria-label="Faixa anterior" title="Anterior">
-      <span class="control-icon">⏮</span>
-    </button>
-    <button type="button" id="playPauseBtn" class="control-btn main-btn" onclick="togglePlay()" aria-label="Tocar" title="Tocar">
-      <span class="control-icon">▶</span>
-    </button>
-    <button type="button" class="control-btn skip-btn" onclick="nextTrack()" aria-label="Proxima faixa" title="Proxima">
-      <span class="control-icon">⏭</span>
-    </button>
-    <button type="button" id="shuffleBtn" class="control-btn mode-btn" onclick="toggleShuffle()" aria-label="Aleatorio" title="Aleatorio">
-      <span class="control-icon">
-        <svg class="shuffle-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M4 8h12" />
-          <path d="M13 5l3 3-3 3" />
-          <path d="M4 16h12" />
-          <path d="M13 13l3 3-3 3" />
-        </svg>
-      </span>
-      <span class="control-label">Aleatorio</span>
-    </button>
-    <button type="button" id="repeatBtn" class="control-btn mode-btn" onclick="toggleRepeat()" aria-label="Repetir todas" title="Repetir: Todas">
-      <span class="control-icon">↻</span>
-      <span class="control-label">Todas</span>
-    </button>
+    <div class="progress-row">
+      <span id="currentTime" class="time-label">0:00</span>
+      <input type="range" id="progressBar" class="progress-bar" min="0" max="100" value="0" step="0.1" aria-label="Progresso da musica" />
+      <span id="durationTime" class="time-label">0:00</span>
+    </div>
+
+    <div class="control-row">
+      <button type="button" class="control-btn skip-btn" onclick="previousTrack()" aria-label="Faixa anterior" title="Anterior">
+        <span class="control-icon">⏮</span>
+      </button>
+      <button type="button" id="playPauseBtn" class="control-btn main-btn" onclick="togglePlay()" aria-label="Tocar" title="Tocar">
+        <span class="control-icon">▶</span>
+      </button>
+      <button type="button" class="control-btn skip-btn" onclick="nextTrack()" aria-label="Proxima faixa" title="Proxima">
+        <span class="control-icon">⏭</span>
+      </button>
+      <button type="button" id="shuffleBtn" class="control-btn mode-btn" onclick="toggleShuffle()" aria-label="Aleatorio" title="Aleatorio">
+        <span class="control-icon">
+          <svg class="shuffle-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 8h12" />
+            <path d="M13 5l3 3-3 3" />
+            <path d="M4 16h12" />
+            <path d="M13 13l3 3-3 3" />
+          </svg>
+        </span>
+        <span class="control-label">Aleatorio</span>
+      </button>
+      <button type="button" id="repeatBtn" class="control-btn mode-btn" onclick="toggleRepeat()" aria-label="Repetir todas" title="Repetir: Todas">
+        <span class="control-icon">↻</span>
+        <span class="control-label">Todas</span>
+      </button>
+    </div>
   </footer>
 
   <script src="script.js"></script>
