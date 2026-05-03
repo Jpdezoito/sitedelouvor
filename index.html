@@ -4,142 +4,71 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Meus Louvores</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #111827;
-      --panel: #172033;
-      --panel-soft: #202a3f;
-      --line: #334155;
-      --text: #f8fafc;
-      --muted: #aebaca;
-      --accent: #22c55e;
-      --shadow: rgba(0, 0, 0, 0.32);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at top left, rgba(34, 197, 94, 0.16), transparent 34rem),
-        linear-gradient(135deg, #0f172a, var(--bg));
-      color: var(--text);
-      padding: 18px;
-    }
-
-    .app {
-      width: min(1280px, 100%);
-      margin: 0 auto;
-    }
-
-    .player-area {
-      background: rgba(23, 32, 51, 0.92);
-      border: 1px solid rgba(148, 163, 184, 0.18);
-      border-radius: 8px;
-      box-shadow: 0 20px 60px var(--shadow);
-      padding: 18px;
-    }
-
-    .title {
-      font-size: clamp(30px, 6vw, 46px);
-      line-height: 1.05;
-      letter-spacing: 0;
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      color: var(--muted);
-      line-height: 1.55;
-      font-size: 15px;
-      margin-bottom: 18px;
-    }
-
-    .album-info {
-      margin-bottom: 14px;
-      padding: 14px 16px;
-      border-radius: 8px;
-      background: var(--panel-soft);
-      border: 1px solid rgba(148, 163, 184, 0.12);
-    }
-
-    .album-info small {
-      color: var(--muted);
-    }
-
-    .album-info h2 {
-      font-size: 22px;
-      line-height: 1.2;
-      margin-top: 6px;
-    }
-
-    .iframe-box {
-      width: 100%;
-      min-height: 1024px;
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-      background: #0b1120;
-      border: 1px solid rgba(148, 163, 184, 0.16);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    iframe {
-      width: 100%;
-      height: 1024px;
-      border: none;
-      border-radius: 8px;
-      background: #0b1120;
-    }
-
-    @media (max-width: 680px) {
-      body {
-        padding: 8px;
-      }
-
-      .player-area {
-        padding: 10px;
-      }
-
-      .iframe-box,
-      iframe {
-        min-height: 860px;
-        height: 860px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <main class="app">
     <section class="player-area" aria-label="Player de louvores">
-      <h1 class="title">Meus Louvores</h1>
-      <p class="subtitle">
-        Album incorporado do EasyMusic para reproduzir varias musicas no mesmo player.
-      </p>
+      <div class="header">
+        <div>
+          <h1 class="title">Meus Louvores</h1>
+          <p class="subtitle">
+            Player com embeds individuais do EasyMusic para navegar entre os louvores pelo site.
+          </p>
+        </div>
 
-      <div class="album-info">
-        <small>Player incorporado</small>
-        <h2>Album EasyMusic</h2>
+        <div class="counter" aria-label="Total de louvores">
+          <strong id="totalMusics">0</strong>
+          louvores
+        </div>
       </div>
 
-      <div class="iframe-box">
-        <iframe
-          width="100%"
-          height="1024"
-          src="https://easymusic.ai/pt/albums/share/4bc2ded5-33f6-4513-b5e2-5da25036d26b/embed"
-          allow="autoplay; web-share"
-          loading="lazy"
-          title="EasyMusic.AI Player"
-          sandbox="allow-scripts allow-same-origin allow-popups allow-top-navigation">
-        </iframe>
+      <div class="now-playing">
+        <small>Tocando agora</small>
+        <h2 id="currentTitle">Nenhum louvor selecionado</h2>
       </div>
+
+      <div class="iframe-box" id="iframeBox">
+        <div class="empty-player">
+          Escolha um louvor na biblioteca ou aperte Play para carregar a primeira faixa.
+        </div>
+      </div>
+
     </section>
+
+    <aside class="library" aria-label="Biblioteca de louvores">
+      <h2>Biblioteca</h2>
+      <div class="music-list" id="musicList"></div>
+    </aside>
   </main>
+
+  <footer class="controls" aria-label="Controles do player">
+    <button type="button" class="control-btn skip-btn" onclick="previousTrack()" aria-label="Faixa anterior" title="Anterior">
+      <span class="control-icon">⏮</span>
+    </button>
+    <button type="button" id="playPauseBtn" class="control-btn main-btn" onclick="togglePlay()" aria-label="Tocar" title="Tocar">
+      <span class="control-icon">▶</span>
+    </button>
+    <button type="button" class="control-btn skip-btn" onclick="nextTrack()" aria-label="Proxima faixa" title="Proxima">
+      <span class="control-icon">⏭</span>
+    </button>
+    <button type="button" id="shuffleBtn" class="control-btn mode-btn" onclick="toggleShuffle()" aria-label="Aleatorio" title="Aleatorio">
+      <span class="control-icon">
+        <svg class="shuffle-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 8h12" />
+          <path d="M13 5l3 3-3 3" />
+          <path d="M4 16h12" />
+          <path d="M13 13l3 3-3 3" />
+        </svg>
+      </span>
+      <span class="control-label">Aleatorio</span>
+    </button>
+    <button type="button" id="repeatBtn" class="control-btn mode-btn" onclick="toggleRepeat()" aria-label="Repetir todas" title="Repetir: Todas">
+      <span class="control-icon">↻</span>
+      <span class="control-label">Todas</span>
+    </button>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
