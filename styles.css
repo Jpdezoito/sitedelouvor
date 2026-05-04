@@ -30,7 +30,8 @@ body {
     repeating-linear-gradient(0deg, rgba(99, 54, 20, 0.18) 0 2px, transparent 2px 18px),
     linear-gradient(135deg, #f6d486 0%, #b9782d 38%, #4c2411 72%, var(--bg) 100%);
   color: var(--text);
-  padding: 18px 18px 112px;
+  padding: 18px 18px 154px;
+  overflow-x: hidden;
 }
 
 body::before {
@@ -154,7 +155,8 @@ body::after {
 
 .iframe-box {
   width: 100%;
-  min-height: 760px;
+  height: clamp(520px, 70vh, 760px);
+  min-height: 520px;
   display: flex;
   justify-content: center;
   align-items: stretch;
@@ -169,7 +171,7 @@ body::after {
 
 iframe {
   width: 100%;
-  height: 760px;
+  height: 100%;
   border: none;
   border-radius: 8px;
   background: #0f0d0a;
@@ -196,7 +198,7 @@ iframe {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  padding: 14px 18px;
+  padding: 14px 18px 16px;
   border: 0;
   border-top: 1px solid rgba(255, 221, 148, 0.42);
   border-radius: 0;
@@ -257,6 +259,7 @@ iframe {
 }
 
 .control-row {
+  width: min(920px, 100%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -490,7 +493,17 @@ button:hover {
   white-space: normal;
 }
 
+@media (max-width: 1180px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr) 320px;
+  }
+}
+
 @media (max-width: 980px) {
+  body {
+    padding-bottom: 182px;
+  }
+
   .app {
     grid-template-columns: 1fr;
   }
@@ -500,13 +513,21 @@ button:hover {
   }
 
   .music-list {
-    max-height: none;
+    max-height: 360px;
+  }
+
+  .iframe-box {
+    height: clamp(500px, 68vh, 700px);
   }
 }
 
 @media (max-width: 680px) {
   body {
-    padding: 8px 8px 126px;
+    padding: 8px 8px 248px;
+    background:
+      linear-gradient(180deg, rgba(255, 221, 139, 0.44), transparent 30%),
+      repeating-linear-gradient(0deg, rgba(99, 54, 20, 0.16) 0 2px, transparent 2px 18px),
+      linear-gradient(145deg, #b9782d 0%, #4c2411 56%, var(--bg) 100%);
   }
 
   .player-area,
@@ -518,22 +539,37 @@ button:hover {
     display: block;
   }
 
+  .title {
+    font-size: 32px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
   .counter {
     width: 100%;
     margin-top: 12px;
   }
 
-  .iframe-box,
-  iframe {
-    min-height: 760px;
-    height: 760px;
+  .now-playing {
+    padding: 12px;
+  }
+
+  .now-playing h2 {
+    font-size: 18px;
+  }
+
+  .iframe-box {
+    height: 62vh;
+    min-height: 430px;
   }
 
   .controls {
     bottom: 0;
     width: 100%;
-    padding: 10px 8px;
-    gap: 10px;
+    padding: 10px 8px 12px;
+    gap: 9px;
   }
 
   .progress-row {
@@ -542,20 +578,82 @@ button:hover {
   }
 
   .control-row {
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 46px 58px 46px minmax(0, 1fr) minmax(0, 1fr);
     gap: 10px;
+    align-items: center;
+  }
+
+  .control-btn {
+    width: 46px;
+    height: 46px;
+    min-height: 46px;
+  }
+
+  .main-btn {
+    width: 58px;
+    height: 58px;
+    min-height: 58px;
   }
 
   .mode-btn {
-    flex: 1 1 140px;
+    width: 100%;
+    min-width: 0;
   }
 
   .volume-control {
-    flex: 1 1 100%;
+    grid-column: 1 / -1;
     justify-content: center;
+    width: 100%;
   }
 
   .volume-slider {
-    width: min(180px, 42vw);
+    width: min(240px, 52vw);
+  }
+}
+
+@media (max-width: 420px) {
+  body {
+    padding-bottom: 286px;
+  }
+
+  .app {
+    gap: 10px;
+  }
+
+  .player-area,
+  .library {
+    border-radius: 6px;
+  }
+
+  .iframe-box {
+    height: 58vh;
+    min-height: 380px;
+  }
+
+  .controls {
+    padding-inline: 6px;
+  }
+
+  .progress-row {
+    grid-template-columns: 36px minmax(0, 1fr) 36px;
+  }
+
+  .time-label {
+    font-size: 12px;
+  }
+
+  .mode-btn {
+    height: 40px;
+    min-height: 40px;
+    padding-inline: 10px;
+  }
+
+  .volume-control {
+    padding-inline: 8px;
+  }
+
+  .volume-slider {
+    width: min(190px, 46vw);
   }
 }
