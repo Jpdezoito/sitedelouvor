@@ -364,41 +364,40 @@ function updateShuffleButton() {
 function toggleRepeat() {
   if (repeatMode === "all") {
     repeatMode = "one";
-    repeatBtn.innerHTML = `
-      <span class="control-icon">↻</span>
-      <span class="control-label">Uma</span>
-    `;
-    repeatBtn.setAttribute("aria-label", "Repetir uma");
-    repeatBtn.title = "Repetir: Uma";
-    repeatBtn.classList.add("active");
+    updateRepeatButton();
     return;
   }
 
   if (repeatMode === "one") {
     repeatMode = "off";
-    repeatBtn.innerHTML = `
-      <span class="control-icon">↻</span>
-      <span class="control-label">Off</span>
-    `;
-    repeatBtn.setAttribute("aria-label", "Repeticao desligada");
-    repeatBtn.title = "Repetir: Desligado";
-    repeatBtn.classList.remove("active");
+    updateRepeatButton();
     return;
   }
 
   repeatMode = "all";
+  updateRepeatButton();
+}
+
+function updateRepeatButton() {
+  const repeatLabel = repeatMode === "one" ? "Uma" : repeatMode === "all" ? "Todas" : "Off";
+  const repeatAria = repeatMode === "one" ? "Repetir uma" : repeatMode === "all" ? "Repetir todas" : "Repeticao desligada";
+  const repeatTitle = repeatMode === "one" ? "Repetir: Uma" : repeatMode === "all" ? "Repetir: Todas" : "Repetir: Desligado";
+  const repeatBadge = repeatMode === "one" ? `<span class="repeat-badge" aria-hidden="true">1</span>` : "";
+
   repeatBtn.innerHTML = `
-    <span class="control-icon">↻</span>
-    <span class="control-label">Todas</span>
+    <span class="control-icon repeat-icon">↻${repeatBadge}</span>
+    <span class="control-label">${repeatLabel}</span>
   `;
-  repeatBtn.setAttribute("aria-label", "Repetir todas");
-  repeatBtn.title = "Repetir: Todas";
-  repeatBtn.classList.add("active");
+  repeatBtn.setAttribute("aria-label", repeatAria);
+  repeatBtn.setAttribute("aria-pressed", String(repeatMode !== "off"));
+  repeatBtn.title = repeatTitle;
+  repeatBtn.classList.toggle("active", repeatMode !== "off");
+  repeatBtn.classList.toggle("repeat-one", repeatMode === "one");
 }
 
 totalMusics.textContent = musics.length;
-repeatBtn.classList.add("active");
 updateShuffleButton();
+updateRepeatButton();
 updateVolume();
 updateTurboButton();
 audioPlayer.addEventListener("ended", nextTrack);

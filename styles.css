@@ -423,6 +423,28 @@ button:hover {
   font-size: 18px;
 }
 
+.repeat-icon {
+  position: relative;
+}
+
+.repeat-badge {
+  position: absolute;
+  right: -7px;
+  top: -9px;
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #211006;
+  color: var(--warning);
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+  box-shadow: 0 0 0 1px rgba(255, 238, 191, 0.65);
+}
+
 .shuffle-icon {
   width: 18px;
   height: 18px;
@@ -579,9 +601,10 @@ button:hover {
 
   .control-row {
     display: grid;
-    grid-template-columns: 46px 58px 46px minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: 46px 58px 46px 46px 46px;
     gap: 10px;
     align-items: center;
+    justify-content: center;
   }
 
   .control-btn {
@@ -597,8 +620,18 @@ button:hover {
   }
 
   .mode-btn {
-    width: 100%;
+    width: 46px;
     min-width: 0;
+    padding: 0;
+  }
+
+  .mode-btn .control-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 
   .volume-control {
@@ -644,9 +677,27 @@ button:hover {
   }
 
   .mode-btn {
-    height: 40px;
-    min-height: 40px;
-    padding-inline: 10px;
+    width: 42px;
+    height: 42px;
+    min-height: 42px;
+    padding: 0;
+  }
+
+  .control-row {
+    grid-template-columns: 42px 56px 42px 42px 42px;
+    gap: 8px;
+  }
+
+  .control-btn {
+    width: 42px;
+    height: 42px;
+    min-height: 42px;
+  }
+
+  .main-btn {
+    width: 56px;
+    height: 56px;
+    min-height: 56px;
   }
 
   .volume-control {
